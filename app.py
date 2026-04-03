@@ -9,7 +9,7 @@ st.set_page_config(page_title="SanaEnglishPro V2", page_icon="🎓", layout="wid
 # 2. FONCTION AUDIO
 def prononcer_anglais(texte):
     try:
-        # Nettoyage du texte pour gTTS
+        # Nettoyage du texte (enlève parenthèses et tirets pour une meilleure voix)
         texte_propre = texte.split('(')[0].split('/')[0].split('—')[0].strip()
         tts = gTTS(text=texte_propre, lang='en')
         filename = "prononciation.mp3"
@@ -19,9 +19,9 @@ def prononcer_anglais(texte):
             st.audio(audio_bytes, format="audio/mp3")
         os.remove(filename)
     except Exception:
-        st.error("Erreur audio.")
+        st.error("Erreur audio. Vérifiez votre connexion.")
 
-# 3. BASE DE DONNÉES (Session State pour éviter de recharger)
+# 3. BASE DE DONNÉES (200 EXPRESSIONS)
 if 'data' not in st.session_state:
     st.session_state.data = [
         # --- VIE QUOTIDIENNE & SALUTATIONS ---
@@ -68,7 +68,7 @@ if 'data' not in st.session_state:
         {"en": "Win-win situation", "fr": "Situation gagnant-gagnant", "ex": "It's a win-win situation for us."},
         {"en": "Under the weather", "fr": "Un peu malade", "ex": "I'm feeling a bit under the weather today."},
         {"en": "Piece of cake", "fr": "C'est du gâteau / Très facile", "ex": "That exam was a piece of cake."},
-        {"en": "The bottom line", "fr": "L'essentiel / Le résultat net", "ex": "The bottom line is we need more users."},
+        {"en": "The bottom line", "fr": "L'essentiel", "ex": "The bottom line is we need more users."},
         {"en": "To meet a deadline", "fr": "Respecter une échéance", "ex": "We must meet the deadline."},
         {"en": "To schedule a meeting", "fr": "Planifier une réunion", "ex": "Can we schedule a meeting for Monday?"},
         {"en": "To follow up", "fr": "Faire un suivi", "ex": "I'll follow up with you tomorrow."},
@@ -83,7 +83,7 @@ if 'data' not in st.session_state:
         {"en": "I agree with you", "fr": "Je suis d'accord avec vous", "ex": "I agree with you on this point."},
         {"en": "I don't think so", "fr": "Je ne pense pas", "ex": "Is it easy? - I don't think so."},
         {"en": "That's a good point", "fr": "C'est un bon point", "ex": "You're right, that's a good point."},
-        {"en": "Let's wrap it up", "fr": "Finissons-en / Concluons", "ex": "It's late, let's wrap it up."},
+        {"en": "Let's wrap it up", "fr": "Finissons-en", "ex": "It's late, let's wrap it up."},
         {"en": "What do you think?", "fr": "Qu'en penses-tu ?", "ex": "I like it, what do you think?"},
         {"en": "Any questions?", "fr": "Des questions ?", "ex": "That's all, any questions?"},
         {"en": "To postpone", "fr": "Reporter", "ex": "The meeting is postponed to Friday."},
@@ -127,7 +127,140 @@ if 'data' not in st.session_state:
         {"en": "It's not rocket science", "fr": "C'est pas sorcier", "ex": "Using this app is not rocket science."},
         {"en": "Break the ice", "fr": "Briser la glace", "ex": "He told a joke to break the ice."},
         {"en": "Cost an arm and a leg", "fr": "Coûter les yeux de la tête", "ex": "This car cost an arm and a leg."},
-        {"en": "Kill two birds with one stone", "fr": "Faire d'une pierre deux coups", "ex": "I'll go to the bank and the store, killing two birds with one stone."},
-        {"en": "Once in a blue moon", "fr": "Tous les 36 du mois", "ex": "I go to the cinema once in a blue moon."},
-        {"en": "The best of both worlds", "fr": "Le meilleur des deux mondes", "ex": "Working from home gives me the best of both worlds."},
-        {"en": "Spill
+        {"en": "Spill the beans", "fr": "Vendre la mèche", "ex": "Don't spill the beans about the party."},
+        {"en": "Take it with a grain of salt", "fr": "Prendre avec des pincettes", "ex": "Take his advice with a grain of salt."},
+        {"en": "Cry over spilled milk", "fr": "Pleurer sur le lait renversé", "ex": "It's done, don't cry over spilled milk."},
+        {"en": "Blessing in disguise", "fr": "Un mal pour un bien", "ex": "Losing that job was a blessing in disguise."},
+        {"en": "Beat around the bush", "fr": "Tourner autour du pot", "ex": "Stop beating around the bush."},
+        {"en": "Better late than never", "fr": "Mieux vaut tard que jamais", "ex": "You're late! - Better late than never."},
+        {"en": "Cut somebody some slack", "fr": "Être indulgent", "ex": "He's new, cut him some slack."},
+        {"en": "Cutting corners", "fr": "Faire les choses à la va-vite", "ex": "Don't cut corners on safety."},
+        {"en": "Easy does it", "fr": "Doucement", "ex": "Easy does it, the glass is fragile."},
+        {"en": "Get out of hand", "fr": "Dégénérer", "ex": "The party got out of hand."},
+        {"en": "Get your act together", "fr": "Se ressaisir", "ex": "You're failing, get your act together."},
+        {"en": "Give someone the benefit of the doubt", "fr": "Accorder le bénéfice du doute", "ex": "I'll give him the benefit of the doubt."},
+        {"en": "Go back to the drawing board", "fr": "Repartir de zéro", "ex": "It failed, let's go back to the drawing board."},
+        {"en": "Hang in there", "fr": "Tiens bon", "ex": "I know it's hard, but hang in there."},
+        {"en": "Hit the nail on the head", "fr": "Mettre le doigt sur le problème", "ex": "You hit the nail on the head."},
+        {"en": "Ignorance is bliss", "fr": "L'ignorance est une bénédiction", "ex": "I didn't know. Ignorance is bliss."},
+        {"en": "It's the last straw", "fr": "C'est la goutte d'eau", "ex": "He's late again! This is the last straw."},
+        {"en": "Let someone off the hook", "fr": "Laisser filer quelqu'un", "ex": "I'll let you off the hook this time."},
+        {"en": "Make a long story short", "fr": "Pour faire court", "ex": "To make a long story short, we won."},
+        {"en": "Miss the boat", "fr": "Rater le coche", "ex": "The sale ended, I missed the boat."},
+        {"en": "No pain, no gain", "fr": "On n'a rien sans rien", "ex": "Keep training! No pain, no gain."},
+        {"en": "On the ball", "fr": "Être réactif", "ex": "She's really on the ball at work."},
+        {"en": "Pull someone's leg", "fr": "Mener quelqu'un en bateau", "ex": "Are you serious? - No, I'm pulling your leg."},
+        {"en": "Pull yourself together", "fr": "Reprends-toi", "ex": "Stop crying and pull yourself together."},
+        {"en": "So far so good", "fr": "Jusqu'ici tout va bien", "ex": "The project is moving, so far so good."},
+        {"en": "Speak of the devil", "fr": "Quand on parle du loup", "ex": "Hi John! Speak of the devil..."},
+        {"en": "Through thick and thin", "fr": "Contre vents et marées", "ex": "They stayed together through thick and thin."},
+        {"en": "Time flies", "fr": "Le temps passe vite", "ex": "Look at the time! Time flies."},
+        {"en": "Wrap your head around something", "fr": "Arriver à comprendre", "ex": "I can't wrap my head around this."},
+        {"en": "You can say that again", "fr": "Je suis tout à fait d'accord", "ex": "It's hot! - You can say that again."},
+        {"en": "Your guess is as good as mine", "fr": "Je n'en sais pas plus que toi", "ex": "When will it start? - Your guess is as good as mine."},
+
+        # --- VERBES IRRÉGULIERS ---
+        {"en": "To bear (bore/borne)", "fr": "Supporter", "ex": "I can't bear this noise."},
+        {"en": "To beat (beat/beaten)", "fr": "Battre", "ex": "Our team beat theirs."},
+        {"en": "To become (became/become)", "fr": "Devenir", "ex": "He became a doctor."},
+        {"en": "To begin (began/begun)", "fr": "Commencer", "ex": "Let's begin the meeting."},
+        {"en": "To bend (bent/bent)", "fr": "Plier", "ex": "Bend your knees."},
+        {"en": "To bet (bet/bet)", "fr": "Parier", "ex": "I bet he will be late."},
+        {"en": "To bite (bit/bitten)", "fr": "Mordre", "ex": "The dog bit me."},
+        {"en": "To bleed (bled/bled)", "fr": "Saigner", "ex": "Your finger is bleeding."},
+        {"en": "To blow (blew/blown)", "fr": "Souffler", "ex": "The wind blew hard."},
+        {"en": "To break (broke/broken)", "fr": "Casser", "ex": "I broke my glasses."},
+        {"en": "To bring (brought/brought)", "fr": "Apporter", "ex": "Bring me the report."},
+        {"en": "To build (built/built)", "fr": "Construire", "ex": "They built a new site."},
+        {"en": "To burn (burnt/burnt)", "fr": "Brûler", "ex": "The wires burnt out."},
+        {"en": "To buy (bought/bought)", "fr": "Acheter", "ex": "I bought a new SFP module."},
+        {"en": "To catch (caught/caught)", "fr": "Attraper", "ex": "Catch the ball!"},
+        {"en": "To choose (chose/chosen)", "fr": "Choisir", "ex": "Choose a color."},
+        {"en": "To come (came/come)", "fr": "Venir", "ex": "Come here please."},
+        {"en": "To cost (cost/cost)", "fr": "Coûter", "ex": "How much does it cost?"},
+        {"en": "To cut (cut/cut)", "fr": "Couper", "ex": "Cut the power."},
+        {"en": "To dig (dug/dug)", "fr": "Creuser", "ex": "They are digging a trench."},
+        {"en": "To do (did/done)", "fr": "Faire", "ex": "I did my homework."},
+        {"en": "To draw (drew/drawn)", "fr": "Dessiner", "ex": "Draw a diagram."},
+        {"en": "To drink (drank/drunk)", "fr": "Boire", "ex": "Drink some water."},
+        {"en": "To drive (drove/driven)", "fr": "Conduire", "ex": "I drive to the site."},
+        {"en": "To eat (ate/eaten)", "fr": "Manger", "ex": "Have you eaten?"},
+        {"en": "To fall (fell/fallen)", "fr": "Tomber", "ex": "The antenna fell."},
+        {"en": "To feel (felt/felt)", "fr": "Ressentir", "ex": "I feel tired."},
+        {"en": "To find (found/found)", "fr": "Trouver", "ex": "I found the fault."},
+        {"en": "To forget (forgot/forgotten)", "fr": "Oublier", "ex": "Don't forget the keys."},
+        {"en": "To get (got/got)", "fr": "Obtenir", "ex": "I got the message."},
+        {"en": "To give (gave/given)", "fr": "Donner", "ex": "Give me a hand."},
+        {"en": "To hear (heard/heard)", "fr": "Entendre", "ex": "Can you hear me?"},
+        {"en": "To keep (kept/kept)", "fr": "Garder", "ex": "Keep the change."},
+        {"en": "To know (knew/known)", "fr": "Savoir", "ex": "I know the answer."},
+        {"en": "To lead (led/led)", "fr": "Mener / Diriger", "ex": "He leads the team."},
+        {"en": "To learn (learnt/learnt)", "fr": "Apprendre", "ex": "I am learning English."},
+        {"en": "To leave (left/left)", "fr": "Partir / Quitter", "ex": "I am leaving now."},
+        {"en": "To lose (lost/lost)", "fr": "Perdre", "ex": "I lost my phone."},
+        {"en": "To make (made/made)", "fr": "Faire / Fabriquer", "ex": "I made a mistake."},
+        {"en": "To mean (meant/meant)", "fr": "Signifier", "ex": "What does it mean?"}
+    ]
+
+# 4. INTERFACE UTILISATEUR
+st.title("🎓 SanaEnglishPro V2 (200+)")
+st.sidebar.title("📚 Menu")
+st.sidebar.write(f"✅ Base de données : **{len(st.session_state.data)}** phrases")
+
+menu = st.sidebar.selectbox("Choisir une section", ["Flashcards", "Dictionnaire", "Objectif & Stats"])
+
+if menu == "Flashcards":
+    st.subheader("🎯 Entraînement Aléatoire")
+    if 'current_card' not in st.session_state:
+        st.session_state.current_card = random.choice(st.session_state.data)
+        st.session_state.show_ans = False
+
+    card = st.session_state.current_card
+    st.info(f"## {card['en']}")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("🔊 Écouter", key="btn_flash_audio"):
+            prononcer_anglais(card['en'])
+    with col2:
+        if st.button("🔄 Traduire", key="btn_flash_trans"):
+            st.session_state.show_ans = True
+    with col3:
+        if st.button("➡️ Suivant", key="btn_flash_next"):
+            st.session_state.current_card = random.choice(st.session_state.data)
+            st.session_state.show_ans = False
+            st.rerun()
+
+    if st.session_state.show_ans:
+        st.success(f"**Français :** {card['fr']}")
+        st.warning(f"**Exemple :** {card['ex']}")
+
+elif menu == "Dictionnaire":
+    st.subheader("📚 Bibliothèque Complète")
+    search = st.text_input("Rechercher un mot ou une expression...")
+    
+    results = [i for i in st.session_state.data if search.lower() in i['en'].lower() or search.lower() in i['fr'].lower()]
+    
+    st.write(f"Résultats trouvés : {len(results)}")
+    
+    for i, r in enumerate(results):
+        with st.expander(f"🇬🇧 {r['en']}"):
+            st.write(f"**🇫🇷 Traduction :** {r['fr']}")
+            st.write(f"**💡 Exemple :** {r['ex']}")
+            # Correction de l'erreur DuplicateKey : on utilise l'index i
+            if st.button(f"🔊 Prononcer", key=f"dict_audio_{i}"):
+                prononcer_anglais(r['en'])
+
+else:
+    st.subheader("ℹ️ À propos & Objectifs")
+    st.write(f"Félicitations Rosly ! Ton application contient maintenant **{len(st.session_state.data)}** expressions.")
+    
+    progression = len(st.session_state.data) / 200
+    st.progress(min(progression, 1.0))
+    
+    st.write("### Conseils pour Rosly :")
+    st.write("- 🛠️ **Technique :** Utilise le dictionnaire pour tes rapports sur les sites GSM.")
+    st.write("- 📞 **Communication :** Écoute la prononciation avant tes appels avec Eric.")
+    st.write("- 🚀 **Régularité :** 5 minutes par jour sur smartphone suffisent.")
+    
+    st.balloons()
