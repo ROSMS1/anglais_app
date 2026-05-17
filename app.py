@@ -4,35 +4,35 @@ import os
 import random
 
 # ─────────────────────────────────────────────
-# 1. CONFIGURATION DE LA PAGE
+# 1. PAGE CONFIGURATION
 # ─────────────────────────────────────────────
 st.set_page_config(page_title="SanaEnglishPro V3", page_icon="🎓", layout="wide")
 
 # ─────────────────────────────────────────────
-# 2. FONCTION AUDIO
+# 2. AUDIO FUNCTION
 # ─────────────────────────────────────────────
-def prononcer_anglais(texte, key_suffix=""):
+def play_english(text, key_suffix=""):
     try:
-        texte_propre = texte.split('(')[0].split('/')[0].split('—')[0].strip()
-        tts = gTTS(text=texte_propre, lang='en')
-        filename = f"prononciation_{key_suffix}.mp3"
+        clean_text = text.split('(')[0].split('/')[0].split('—')[0].strip()
+        tts = gTTS(text=clean_text, lang='en')
+        filename = f"pronunciation_{key_suffix}.mp3"
         tts.save(filename)
         with open(filename, "rb") as audio_file:
             audio_bytes = audio_file.read()
             st.audio(audio_bytes, format="audio/mp3")
         os.remove(filename)
     except Exception:
-        st.error("Erreur audio. Vérifiez votre connexion.")
+        st.error("Audio error. Please check your internet connection.")
 
 # ─────────────────────────────────────────────
-# 3. BASE DE DONNÉES (300+ EXPRESSIONS)
+# 3. DATABASE (310+ EXPRESSIONS)
 # ─────────────────────────────────────────────
 ALL_DATA = {
 
     # ══════════════════════════════════════════
-    # VIE QUOTIDIENNE & SALUTATIONS
+    # DAILY LIFE & GREETINGS
     # ══════════════════════════════════════════
-    "Vie Quotidienne": [
+    "Daily Life & Greetings": [
         {"en": "What's up?", "fr": "Quoi de neuf ?", "ex": "Hey man, what's up?"},
         {"en": "How's it going?", "fr": "Comment ça va ?", "ex": "How's it going with your new job?"},
         {"en": "Long time no see", "fr": "Ça fait un bail", "ex": "Oh, hi Mark! Long time no see."},
@@ -66,9 +66,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # TRAVAIL & RÉUNION
+    # WORK & MEETINGS
     # ══════════════════════════════════════════
-    "Travail & Réunion": [
+    "Work & Meetings": [
         {"en": "Get down to business", "fr": "Passons aux choses sérieuses", "ex": "Let's get down to business."},
         {"en": "Keep me posted", "fr": "Tiens-moi au courant", "ex": "Keep me posted on the situation."},
         {"en": "In a nutshell", "fr": "En résumé", "ex": "In a nutshell, we are losing money."},
@@ -103,9 +103,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # TÉLÉCOM & RÉSEAU (AVANCÉ)
+    # TELECOM & NETWORK
     # ══════════════════════════════════════════
-    "Télécom & Réseau": [
+    "Telecom & Network": [
         {"en": "To troubleshoot", "fr": "Dépanner / Résoudre", "ex": "I need to troubleshoot this site."},
         {"en": "Site audit", "fr": "Audit de site", "ex": "We are conducting a site audit."},
         {"en": "Power failure", "fr": "Panne d'électricité", "ex": "There is a power failure at site X."},
@@ -149,9 +149,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # EMAILS & RÉDACTION PROFESSIONNELLE
+    # EMAILS & PROFESSIONAL WRITING
     # ══════════════════════════════════════════
-    "Emails & Rédaction": [
+    "Emails & Writing": [
         {"en": "I hope this email finds you well", "fr": "J'espère que vous allez bien", "ex": "Dear Eric, I hope this email finds you well."},
         {"en": "Further to our conversation...", "fr": "Suite à notre conversation...", "ex": "Further to our conversation this morning..."},
         {"en": "Please find attached", "fr": "Veuillez trouver ci-joint", "ex": "Please find attached the report."},
@@ -180,9 +180,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # NÉGOCIATION & RÉUNION FORMELLE
+    # NEGOTIATION & FORMAL LANGUAGE
     # ══════════════════════════════════════════
-    "Négociation & Formel": [
+    "Negotiation & Formal": [
         {"en": "I'd like to propose...", "fr": "Je voudrais proposer...", "ex": "I'd like to propose a new schedule."},
         {"en": "Could we find a middle ground?", "fr": "Pourrions-nous trouver un compromis ?", "ex": "Could we find a middle ground on the budget?"},
         {"en": "That's non-negotiable", "fr": "Ce n'est pas négociable", "ex": "The deadline is non-negotiable."},
@@ -196,17 +196,17 @@ ALL_DATA = {
         {"en": "Subject to approval", "fr": "Sous réserve d'approbation", "ex": "This is subject to approval from management."},
         {"en": "To raise a concern", "fr": "Soulever une préoccupation", "ex": "I'd like to raise a concern about safety."},
         {"en": "To reach a consensus", "fr": "Parvenir à un consensus", "ex": "The team reached a consensus on the plan."},
-        {"en": "To table a motion", "fr": "Soumettre une motion", "ex": "She tabled a motion to extend the contract."},
         {"en": "On behalf of...", "fr": "Au nom de...", "ex": "On behalf of MTN, I thank you."},
         {"en": "I stand corrected", "fr": "Je reconnais mon erreur", "ex": "You're right, I stand corrected."},
         {"en": "With all due respect...", "fr": "Avec tout le respect que je vous dois...", "ex": "With all due respect, I disagree."},
         {"en": "To clarify my position", "fr": "Pour clarifier ma position", "ex": "Let me clarify my position on this issue."},
         {"en": "Pending your confirmation", "fr": "En attente de votre confirmation", "ex": "We will proceed pending your confirmation."},
         {"en": "To iron out the details", "fr": "Régler les détails", "ex": "Let's iron out the details before signing."},
+        {"en": "To table a motion", "fr": "Soumettre une motion", "ex": "She tabled a motion to extend the contract."},
     ],
 
     # ══════════════════════════════════════════
-    # PHRASAL VERBS (NOUVEAUX)
+    # PHRASAL VERBS
     # ══════════════════════════════════════════
     "Phrasal Verbs": [
         {"en": "To back up", "fr": "Sauvegarder / Reculer / Soutenir", "ex": "Back up the data before the upgrade."},
@@ -242,9 +242,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # EXPRESSIONS IDIOMATIQUES
+    # IDIOMS
     # ══════════════════════════════════════════
-    "Idiomatiques": [
+    "Idioms": [
         {"en": "Bite the bullet", "fr": "Prendre son courage à deux mains", "ex": "I have to bite the bullet and see the dentist."},
         {"en": "Out of the blue", "fr": "À l'improviste", "ex": "He called me out of the blue."},
         {"en": "Hit the sack", "fr": "Aller se coucher", "ex": "I'm tired, I'm going to hit the sack."},
@@ -278,9 +278,9 @@ ALL_DATA = {
     ],
 
     # ══════════════════════════════════════════
-    # VERBES IRRÉGULIERS
+    # IRREGULAR VERBS
     # ══════════════════════════════════════════
-    "Verbes Irréguliers": [
+    "Irregular Verbs": [
         {"en": "To bear (bore/borne)", "fr": "Supporter", "ex": "I can't bear this noise."},
         {"en": "To beat (beat/beaten)", "fr": "Battre", "ex": "Our team beat theirs."},
         {"en": "To become (became/become)", "fr": "Devenir", "ex": "He became a doctor."},
@@ -322,10 +322,82 @@ ALL_DATA = {
         {"en": "To understand (understood/understood)", "fr": "Comprendre", "ex": "I understood the problem."},
         {"en": "To write (wrote/written)", "fr": "Écrire", "ex": "Write the RCA report."},
     ],
+
+    # ══════════════════════════════════════════
+    # MLK – KEY VOCABULARY (Level 2 Story)
+    # ══════════════════════════════════════════
+    "MLK – Key Vocabulary": [
+        {"en": "Segregation", "fr": "Ségrégation raciale", "ex": "Segregation kept Black and white children in separate schools."},
+        {"en": "Equality", "fr": "Égalité", "ex": "Martin Luther King fought for equality for all people."},
+        {"en": "Racism", "fr": "Racisme", "ex": "He spoke out against racism his whole life."},
+        {"en": "Non-violence", "fr": "Non-violence", "ex": "Gandhi and King both believed in non-violence."},
+        {"en": "Protest", "fr": "Manifestation / Protestation", "ex": "They organised a peaceful protest in the city centre."},
+        {"en": "Boycott", "fr": "Boycott", "ex": "The Montgomery Bus Boycott lasted 381 days."},
+        {"en": "Civil rights", "fr": "Droits civiques", "ex": "The Civil Rights Act of 1964 banned segregation in public places."},
+        {"en": "Legacy", "fr": "Héritage / Legs", "ex": "His legacy continues to inspire people around the world."},
+        {"en": "Justice", "fr": "Justice", "ex": "He dedicated his life to the pursuit of justice."},
+        {"en": "Dignity", "fr": "Dignité", "ex": "Every human being deserves to be treated with dignity."},
+        {"en": "Injustice", "fr": "Injustice", "ex": "They marched to protest the injustice in their country."},
+        {"en": "Discrimination", "fr": "Discrimination", "ex": "Racial discrimination was written into law in many states."},
+        {"en": "Assassination", "fr": "Assassinat", "ex": "His assassination in 1968 shocked the entire world."},
+        {"en": "Movement", "fr": "Mouvement (social)", "ex": "He was the leader of the Civil Rights Movement."},
+        {"en": "March", "fr": "Marche (protestataire)", "ex": "Over 250,000 people joined the March on Washington."},
+        {"en": "Minister / Preacher", "fr": "Pasteur / Prédicateur", "ex": "Martin became a Baptist minister like his father."},
+        {"en": "Strike", "fr": "Grève", "ex": "He went to Memphis to support workers who were on strike."},
+        {"en": "Supreme Court", "fr": "Cour Suprême", "ex": "The Supreme Court ruled that bus segregation was illegal."},
+        {"en": "Nobel Peace Prize", "fr": "Prix Nobel de la Paix", "ex": "Martin Luther King won the Nobel Peace Prize in 1964."},
+        {"en": "Volunteer work", "fr": "Travail bénévole", "ex": "On MLK Day, Americans do volunteer work in their communities."},
+        {"en": "Water fountain", "fr": "Fontaine à eau / Robinet public", "ex": "Black people had to use separate water fountains."},
+        {"en": "Unfair", "fr": "Injuste", "ex": "Even as a child, Martin saw that the system was unfair."},
+        {"en": "Courage", "fr": "Courage", "ex": "Rosa Parks showed incredible courage by refusing to give up her seat."},
+        {"en": "Freedom", "fr": "Liberté", "ex": "He dreamed of a nation where all people would live in freedom."},
+        {"en": "Unity", "fr": "Unité", "ex": "His speech was a call for unity between all races."},
+        {"en": "To gather", "fr": "Se rassembler", "ex": "Thousands gathered at the Lincoln Memorial."},
+        {"en": "To be arrested", "fr": "Être arrêté", "ex": "He was arrested many times during the movement."},
+        {"en": "To give up (one's seat)", "fr": "Céder (sa place)", "ex": "Rosa Parks refused to give up her seat on the bus."},
+        {"en": "To be judged by", "fr": "Être jugé par / selon", "ex": "He dreamed that people would be judged by their character, not their skin."},
+        {"en": "To change the law", "fr": "Changer la loi", "ex": "Their peaceful protests helped change the laws of the country."},
+    ],
+
+    # ══════════════════════════════════════════
+    # MLK – POWER EXPRESSIONS (Full Story)
+    # ══════════════════════════════════════════
+    "MLK – Power Expressions": [
+        {"en": "To stand up for", "fr": "Se battre pour / Défendre", "ex": "You must stand up for what you believe in."},
+        {"en": "To speak out against", "fr": "S'élever contre / Dénoncer", "ex": "He spent his life speaking out against racism."},
+        {"en": "To keep moving forward", "fr": "Continuer d'avancer", "ex": "Despite all the threats, he kept moving forward."},
+        {"en": "To meet hate with love", "fr": "Répondre à la haine par l'amour", "ex": "Martin always said: we must meet hate with love."},
+        {"en": "To make a statement", "fr": "Envoyer un message fort / Faire une déclaration", "ex": "By walking instead of riding, they were making a statement."},
+        {"en": "To put down (weapons)", "fr": "Déposer (les armes)", "ex": "The crowd put down their weapons when Martin spoke."},
+        {"en": "To stand strong", "fr": "Tenir bon / Rester debout", "ex": "Even under pressure, they stood strong together."},
+        {"en": "To be drawn to someone", "fr": "Être attiré par quelqu'un", "ex": "He was drawn to her because of her mind and her heart."},
+        {"en": "To be in need", "fr": "Être dans le besoin", "ex": "He helped people who were in need."},
+        {"en": "To echo through time", "fr": "Résonner à travers le temps", "ex": "His words still echo through time today."},
+        {"en": "To open someone's eyes", "fr": "Ouvrir les yeux de quelqu'un", "ex": "The images of children being attacked opened the world's eyes."},
+        {"en": "To light a fire in someone's heart", "fr": "Allumer un feu dans le cœur de quelqu'un", "ex": "That moment lit a fire in Martin's heart."},
+        {"en": "To hold people together", "fr": "Maintenir les gens unis", "ex": "A great leader knows how to hold people together in hard times."},
+        {"en": "To make up one's mind", "fr": "Prendre sa décision / Se décider", "ex": "By the end of college, Martin had made up his mind to become a minister."},
+        {"en": "To have a deep urge to", "fr": "Ressentir une forte envie de", "ex": "He wrote: I have a deep urge to serve humanity."},
+        {"en": "Second-class citizens", "fr": "Citoyens de seconde zone", "ex": "They were tired of being treated like second-class citizens."},
+        {"en": "To be humiliated", "fr": "Être humilié", "ex": "They were humiliated every single day by the system."},
+        {"en": "To tap someone's phone", "fr": "Mettre quelqu'un sur écoute", "ex": "The FBI tapped his phone to spy on him."},
+        {"en": "Miraculously", "fr": "Miraculeusement", "ex": "Miraculously, his wife and baby survived the bomb."},
+        {"en": "To shatter", "fr": "Briser / Fracasser", "ex": "The blast shattered every window in the house."},
+        {"en": "To be a bridge between", "fr": "Être un pont entre", "ex": "He wanted to be a bridge between pain and peace."},
+        {"en": "A spark", "fr": "Une étincelle", "ex": "Rosa Parks' small act of courage became a spark for the whole movement."},
+        {"en": "Destiny is calling", "fr": "Le destin vous appelle", "ex": "He didn't plan to be a leader, but destiny was calling."},
+        {"en": "To lose courage", "fr": "Perdre courage", "ex": "Late at night, alone in his kitchen, he felt he was losing courage."},
+        {"en": "At the end of one's powers", "fr": "À bout de forces", "ex": "He whispered: I'm at the end of my powers."},
+        {"en": "To be a target", "fr": "Être une cible", "ex": "His children grew up knowing their father was both a hero and a target."},
+        {"en": "To be drawn into a story", "fr": "Être plongé dans une histoire", "ex": "Sit back and let the story take you in."},
+        {"en": "To remain calm", "fr": "Rester calme", "ex": "Even with constant threats, Martin remained calm."},
+        {"en": "To preach", "fr": "Prêcher / Donner un sermon", "ex": "His father preached at Ebenezer Baptist Church every Sunday."},
+        {"en": "To be inspired by", "fr": "Être inspiré par", "ex": "Martin was deeply inspired by the ideas of Mahatma Gandhi."},
+    ],
 }
 
 # ─────────────────────────────────────────────
-# 4. INITIALISATION DU SESSION STATE
+# 4. SESSION STATE INITIALIZATION
 # ─────────────────────────────────────────────
 if 'favorites' not in st.session_state:
     st.session_state.favorites = []
@@ -340,7 +412,6 @@ if 'current_card' not in st.session_state:
     st.session_state.current_cat = None
     st.session_state.show_ans = False
 
-# Aplatir toutes les données
 def get_all_items():
     items = []
     for cat, lst in ALL_DATA.items():
@@ -352,28 +423,31 @@ ALL_ITEMS = get_all_items()
 TOTAL = len(ALL_ITEMS)
 
 # ─────────────────────────────────────────────
-# 5. INTERFACE PRINCIPALE
+# 5. MAIN INTERFACE
 # ─────────────────────────────────────────────
 st.title("🎓 SanaEnglishPro V3")
-st.sidebar.title("📚 Menu")
+st.sidebar.title("📚 Navigation")
 st.sidebar.metric("📦 Total expressions", TOTAL)
-st.sidebar.metric("⭐ Favoris", len(st.session_state.favorites))
-st.sidebar.metric("🎯 Quiz Score", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}" if st.session_state.quiz_total > 0 else "—")
+st.sidebar.metric("⭐ Favorites", len(st.session_state.favorites))
+st.sidebar.metric(
+    "🎯 Quiz Score",
+    f"{st.session_state.quiz_score}/{st.session_state.quiz_total}" if st.session_state.quiz_total > 0 else "—"
+)
 
 menu = st.sidebar.selectbox(
-    "Navigation",
-    ["🃏 Flashcards", "📚 Dictionnaire", "🎯 Quiz QCM", "⭐ Favoris", "📊 Statistiques"]
+    "Go to",
+    ["🃏 Flashcards", "📚 Dictionary", "🎯 Quiz", "⭐ Favorites", "📊 Statistics"]
 )
 
 # ─────────────────────────────────────────────
 # 6. FLASHCARDS
 # ─────────────────────────────────────────────
 if menu == "🃏 Flashcards":
-    st.subheader("🃏 Entraînement par Catégorie")
+    st.subheader("🃏 Random Training")
 
-    selected_cat = st.selectbox("Choisir une catégorie", ["🔀 Tout mélanger"] + list(ALL_DATA.keys()))
+    selected_cat = st.selectbox("Select a category", ["🔀 Mix all"] + list(ALL_DATA.keys()))
 
-    if selected_cat == "🔀 Tout mélanger":
+    if selected_cat == "🔀 Mix all":
         pool = ALL_ITEMS
     else:
         pool = [{**item, "cat": selected_cat} for item in ALL_DATA[selected_cat]]
@@ -385,60 +459,58 @@ if menu == "🃏 Flashcards":
 
     card = st.session_state.current_card
 
-    # Badge catégorie
-    st.caption(f"📂 Catégorie : **{card.get('cat', selected_cat)}**")
+    st.caption(f"📂 Category: **{card.get('cat', selected_cat)}**")
 
-    # Carte principale
     st.markdown(f"""
     <div style="background: linear-gradient(135deg,#1a1a2e,#16213e);
                 border-radius:16px; padding:32px; text-align:center;
                 border:2px solid #0f3460; margin-bottom:12px;">
-        <p style="color:#a0aec0; font-size:14px; margin:0 0 8px 0;">🇬🇧 Expression anglaise</p>
+        <p style="color:#a0aec0; font-size:14px; margin:0 0 8px 0;">🇬🇧 English expression</p>
         <h2 style="color:#e2e8f0; font-size:28px; margin:0;">{card['en']}</h2>
     </div>
     """, unsafe_allow_html=True)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        if st.button("🔊 Écouter", use_container_width=True):
-            prononcer_anglais(card['en'], "flash")
+        if st.button("🔊 Listen", use_container_width=True):
+            play_english(card['en'], "flash")
     with col2:
-        if st.button("🔄 Traduire", use_container_width=True):
+        if st.button("🔄 Translate", use_container_width=True):
             st.session_state.show_ans = True
     with col3:
-        if st.button("➡️ Suivant", use_container_width=True):
+        if st.button("➡️ Next", use_container_width=True):
             st.session_state.current_card = random.choice(pool)
             st.session_state.show_ans = False
             st.rerun()
     with col4:
         is_fav = card['en'] in [f['en'] for f in st.session_state.favorites]
-        fav_label = "💛 Retiré" if is_fav else "⭐ Favori"
+        fav_label = "💛 Remove" if is_fav else "⭐ Save"
         if st.button(fav_label, use_container_width=True):
             if is_fav:
                 st.session_state.favorites = [f for f in st.session_state.favorites if f['en'] != card['en']]
-                st.toast("Retiré des favoris")
+                st.toast("Removed from favorites")
             else:
                 st.session_state.favorites.append(card)
-                st.toast("Ajouté aux favoris !")
+                st.toast("Added to favorites!")
             st.rerun()
 
     if st.session_state.show_ans:
-        st.success(f"🇫🇷 **Français :** {card['fr']}")
-        st.info(f"💡 **Exemple :** *{card['ex']}*")
+        st.success(f"🇫🇷 **French:** {card['fr']}")
+        st.info(f"💡 **Example:** *{card['ex']}*")
 
 # ─────────────────────────────────────────────
-# 7. DICTIONNAIRE
+# 7. DICTIONARY
 # ─────────────────────────────────────────────
-elif menu == "📚 Dictionnaire":
-    st.subheader("📚 Bibliothèque Complète")
+elif menu == "📚 Dictionary":
+    st.subheader("📚 Full Expression Library")
 
     col_s, col_c = st.columns([2, 1])
     with col_s:
-        search = st.text_input("🔍 Rechercher une expression...", placeholder="ex: troubleshoot, outage, deadline...")
+        search = st.text_input("🔍 Search an expression...", placeholder="e.g. outage, troubleshoot, deadline...")
     with col_c:
-        cat_filter = st.selectbox("📂 Filtrer par catégorie", ["Toutes"] + list(ALL_DATA.keys()))
+        cat_filter = st.selectbox("📂 Filter by category", ["All"] + list(ALL_DATA.keys()))
 
-    if cat_filter == "Toutes":
+    if cat_filter == "All":
         pool = ALL_ITEMS
     else:
         pool = [{**item, "cat": cat_filter} for item in ALL_DATA[cat_filter]]
@@ -448,19 +520,19 @@ elif menu == "📚 Dictionnaire":
     else:
         results = pool
 
-    st.caption(f"📊 {len(results)} expression(s) affichée(s) sur {TOTAL}")
+    st.caption(f"📊 Showing {len(results)} expression(s) out of {TOTAL}")
 
     for i, r in enumerate(results):
-        with st.expander(f"🇬🇧 {r['en']}  ·  📂 {r.get('cat','')}"):
+        with st.expander(f"🇬🇧 {r['en']}  ·  📂 {r.get('cat', '')}"):
             c1, c2 = st.columns([3, 1])
             with c1:
-                st.write(f"**🇫🇷 Traduction :** {r['fr']}")
-                st.write(f"**💡 Exemple :** *{r['ex']}*")
+                st.write(f"**🇫🇷 French:** {r['fr']}")
+                st.write(f"**💡 Example:** *{r['ex']}*")
             with c2:
-                if st.button("🔊", key=f"dict_audio_{i}", help="Prononcer"):
-                    prononcer_anglais(r['en'], f"dict_{i}")
+                if st.button("🔊", key=f"dict_audio_{i}", help="Pronounce"):
+                    play_english(r['en'], f"dict_{i}")
                 is_fav = r['en'] in [f['en'] for f in st.session_state.favorites]
-                if st.button("💛" if is_fav else "⭐", key=f"dict_fav_{i}", help="Favori"):
+                if st.button("💛" if is_fav else "⭐", key=f"dict_fav_{i}", help="Favorite"):
                     if is_fav:
                         st.session_state.favorites = [f for f in st.session_state.favorites if f['en'] != r['en']]
                     else:
@@ -468,14 +540,14 @@ elif menu == "📚 Dictionnaire":
                     st.rerun()
 
 # ─────────────────────────────────────────────
-# 8. QUIZ QCM
+# 8. QUIZ
 # ─────────────────────────────────────────────
-elif menu == "🎯 Quiz QCM":
-    st.subheader("🎯 Quiz à Choix Multiples")
+elif menu == "🎯 Quiz":
+    st.subheader("🎯 Multiple Choice Quiz")
 
-    cat_q = st.selectbox("Choisir une catégorie", ["🔀 Tout mélanger"] + list(ALL_DATA.keys()), key="quiz_cat")
+    cat_q = st.selectbox("Select a category", ["🔀 Mix all"] + list(ALL_DATA.keys()), key="quiz_cat")
 
-    if cat_q == "🔀 Tout mélanger":
+    if cat_q == "🔀 Mix all":
         pool = ALL_ITEMS
     else:
         pool = [{**item, "cat": cat_q} for item in ALL_DATA[cat_q]]
@@ -496,7 +568,7 @@ elif menu == "🎯 Quiz QCM":
             "answered": None,
         }
 
-    if st.button("🆕 Nouvelle question", use_container_width=True) or st.session_state.quiz_state is None:
+    if st.button("🆕 New question", use_container_width=True) or st.session_state.quiz_state is None:
         st.session_state.quiz_state = generate_quiz(pool)
 
     q = st.session_state.quiz_state
@@ -504,7 +576,7 @@ elif menu == "🎯 Quiz QCM":
         st.markdown(f"""
         <div style="background:#1a1a2e; border-radius:12px; padding:24px;
                     border:2px solid #0f3460; margin-bottom:16px; text-align:center;">
-            <p style="color:#a0aec0; margin:0 0 8px 0;">Que signifie en français :</p>
+            <p style="color:#a0aec0; margin:0 0 8px 0;">What is the French meaning of:</p>
             <h3 style="color:#63b3ed; margin:0;">{q['question']}</h3>
         </div>
         """, unsafe_allow_html=True)
@@ -528,64 +600,64 @@ elif menu == "🎯 Quiz QCM":
 
             if q['answered'] == q['correct']:
                 st.balloons()
-                st.success("🎉 Bonne réponse !")
+                st.success("🎉 Correct answer!")
             else:
-                st.error(f"La bonne réponse était : **{q['correct']}**")
+                st.error(f"The correct answer was: **{q['correct']}**")
 
-            st.info(f"💡 Exemple : *{q['example']}*")
+            st.info(f"💡 Example: *{q['example']}*")
 
-            prct = int((st.session_state.quiz_score / st.session_state.quiz_total) * 100) if st.session_state.quiz_total > 0 else 0
-            st.metric("Score actuel", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}", f"{prct}%")
+            pct = int((st.session_state.quiz_score / st.session_state.quiz_total) * 100) if st.session_state.quiz_total > 0 else 0
+            st.metric("Current score", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}", f"{pct}%")
 
-            if st.button("➡️ Question suivante", use_container_width=True):
+            if st.button("➡️ Next question", use_container_width=True):
                 st.session_state.quiz_state = generate_quiz(pool)
                 st.rerun()
 
-    if st.button("🔄 Réinitialiser le score"):
+    if st.button("🔄 Reset score"):
         st.session_state.quiz_score = 0
         st.session_state.quiz_total = 0
         st.session_state.quiz_state = None
         st.rerun()
 
 # ─────────────────────────────────────────────
-# 9. FAVORIS
+# 9. FAVORITES
 # ─────────────────────────────────────────────
-elif menu == "⭐ Favoris":
-    st.subheader("⭐ Mes Expressions Favorites")
+elif menu == "⭐ Favorites":
+    st.subheader("⭐ My Saved Expressions")
 
     if not st.session_state.favorites:
-        st.info("Tu n'as pas encore de favoris. Appuie sur ⭐ dans les Flashcards ou le Dictionnaire.")
+        st.info("No favorites yet. Tap ⭐ in Flashcards or Dictionary to save expressions.")
     else:
-        st.caption(f"{len(st.session_state.favorites)} expression(s) sauvegardée(s)")
+        st.caption(f"{len(st.session_state.favorites)} expression(s) saved")
 
-        if st.button("🃏 Réviser mes favoris (aléatoire)"):
+        if st.button("🃏 Review my favorites (random)"):
             st.session_state.current_card = random.choice(st.session_state.favorites)
-            st.session_state.current_cat = "Favoris"
+            st.session_state.current_cat = "Favorites"
             st.session_state.show_ans = False
             st.session_state.quiz_state = None
 
         for i, fav in enumerate(st.session_state.favorites):
-            with st.expander(f"⭐ {fav['en']}  ·  📂 {fav.get('cat','')}"):
+            with st.expander(f"⭐ {fav['en']}  ·  📂 {fav.get('cat', '')}"):
                 c1, c2 = st.columns([4, 1])
                 with c1:
-                    st.write(f"**🇫🇷 :** {fav['fr']}")
-                    st.write(f"**💡 :** *{fav['ex']}*")
+                    st.write(f"**🇫🇷 French:** {fav['fr']}")
+                    st.write(f"**💡 Example:** *{fav['ex']}*")
                 with c2:
                     if st.button("🔊", key=f"fav_audio_{i}"):
-                        prononcer_anglais(fav['en'], f"fav_{i}")
-                    if st.button("🗑️", key=f"fav_del_{i}", help="Retirer"):
+                        play_english(fav['en'], f"fav_{i}")
+                    if st.button("🗑️", key=f"fav_del_{i}", help="Remove"):
                         st.session_state.favorites.pop(i)
                         st.rerun()
 
 # ─────────────────────────────────────────────
-# 10. STATISTIQUES
+# 10. STATISTICS
 # ─────────────────────────────────────────────
-elif menu == "📊 Statistiques":
-    st.subheader("📊 Statistiques & Objectifs")
+elif menu == "📊 Statistics":
+    st.subheader("📊 Statistics & Goals")
 
-    st.success(f"🎉 Base de données : **{TOTAL} expressions** en {len(ALL_DATA)} catégories")
+    st.success(f"🎉 Database: **{TOTAL} expressions** across {len(ALL_DATA)} categories")
 
-    st.write("### 📂 Répartition par catégorie")
+    st.write("### 📂 Breakdown by category")
     for cat, items in ALL_DATA.items():
         col_label, col_bar = st.columns([1, 3])
         with col_label:
@@ -596,24 +668,24 @@ elif menu == "📊 Statistiques":
 
     st.divider()
 
-    st.write("### 🎯 Score Quiz global")
+    st.write("### 🎯 Overall Quiz Score")
     if st.session_state.quiz_total > 0:
         pct = int(st.session_state.quiz_score / st.session_state.quiz_total * 100)
-        st.metric("Réponses correctes", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}", f"{pct}%")
+        st.metric("Correct answers", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}", f"{pct}%")
         st.progress(pct / 100)
     else:
-        st.info("Lance un Quiz pour voir ton score ici.")
+        st.info("Start a Quiz to see your score here.")
 
     st.divider()
 
-    st.write("### 🚀 Conseils pour Rosly")
+    st.write("### 🚀 Tips for Rosly")
     tips = [
-        ("🛠️", "**Télécom :** Utilise la catégorie *Télécom & Réseau* avant tes rapports d'incidents."),
-        ("📞", "**Écoute :** Lance l'audio avant tes calls avec Eric ou l'équipe Back Office."),
-        ("🎯", "**Quiz :** 5 questions par jour en catégorie *Négociation* pour tes échanges formels."),
-        ("⭐", "**Favoris :** Épingle les expressions que tu oublies souvent."),
-        ("📧", "**Emails :** Consulte *Emails & Rédaction* avant d'envoyer un RCA en anglais."),
-        ("🔄", "**Phrasal Verbs :** Ce sont les plus utilisés à l'oral — entraîne-toi chaque matin."),
+        ("🛠️", "**Telecom:** Browse the *Telecom & Network* category before writing incident reports."),
+        ("📞", "**Listening:** Always play the audio before calls with Eric or the Back Office team."),
+        ("🎯", "**Quiz:** 5 questions a day in *Negotiation & Formal* to sharpen your formal English."),
+        ("⭐", "**Favorites:** Pin expressions you keep forgetting for focused review."),
+        ("📧", "**Emails:** Open *Emails & Writing* before sending an RCA or formal report in English."),
+        ("🔄", "**Phrasal Verbs:** These are the most used in spoken English — practice them every morning."),
     ]
     for icon, tip in tips:
         st.write(f"{icon} {tip}")
